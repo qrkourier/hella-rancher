@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  nfrouter:
+    image: netfoundry/autonomous-router:v0.3
+    restart: unless-stopped
+    environment:
+      REG_KEY: 6W8OIQI5S1
+      PFXLOG_NO_JSON: "true"
+        #ports:
+        #  - "443:443"
+    volumes:
+      - type: volume
+        source: persistent
+        target: /etc/netfoundry
+    depends_on: []
+  admin:
+    image: busybox
+    volumes:
+      - type: volume
+        source: persistent
+        target: /etc/netfoundry
+          #read_only: true
+volumes:
+  persistent: {}

@@ -1,0 +1,18 @@
+# restore-migration.yaml
+apiVersion: resources.cattle.io/v1
+kind: Restore
+metadata:
+  name: restore-migration
+  namespace: cattle-system
+spec:
+  backupFilename: storj-6fc2b754-a3c7-438f-8069-5e4873c40186-2023-04-24T02-14-03Z.tar.gz
+  prune: false
+  # encryptionConfigSecretName: encryptionconfig
+  storageLocation:
+    s3:
+      credentialSecretName: rancher-backup-storj
+      credentialSecretNamespace: cattle-system
+      bucketName: rancher
+      folder: ""
+      region: ""
+      endpoint: gateway.storjshare.io

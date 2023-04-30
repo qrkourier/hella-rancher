@@ -1,0 +1,44 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-ingress-nginx
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    controller:
+      extraArgs:
+        enable-ssl-passthrough: true
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: singleton-hdd
+provisioner: driver.harvesterhci.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  hostStorageClass: singleton-hdd
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: singleton-nvme
+provisioner: driver.harvesterhci.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  hostStorageClass: singleton-nvme
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: singleton-ssd
+provisioner: driver.harvesterhci.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  hostStorageClass: singleton-ssd

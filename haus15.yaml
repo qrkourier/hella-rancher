@@ -1,0 +1,273 @@
+apiVersion: provisioning.cattle.io/v1
+kind: Cluster
+metadata:
+  annotations:
+    field.cattle.io/creatorId: user-c6fjg
+  creationTimestamp: "2023-04-23T23:52:43Z"
+  finalizers:
+  - wrangler.cattle.io/provisioning-cluster-remove
+  - wrangler.cattle.io/rke-cluster-remove
+  - wrangler.cattle.io/cloud-config-secret-remover
+  generation: 1
+  managedFields:
+  - apiVersion: provisioning.cattle.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:finalizers:
+          .: {}
+          v:"wrangler.cattle.io/cloud-config-secret-remover": {}
+          v:"wrangler.cattle.io/provisioning-cluster-remove": {}
+          v:"wrangler.cattle.io/rke-cluster-remove": {}
+      f:spec:
+        .: {}
+        f:cloudCredentialSecretName: {}
+        f:defaultPodSecurityPolicyTemplateName: {}
+        f:kubernetesVersion: {}
+        f:localClusterAuthEndpoint:
+          .: {}
+          f:caCerts: {}
+          f:enabled: {}
+          f:fqdn: {}
+        f:rkeConfig:
+          .: {}
+          f:additionalManifest: {}
+          f:chartValues:
+            .: {}
+            f:harvester-cloud-provider:
+              .: {}
+              f:cloudConfigPath: {}
+              f:clusterName: {}
+            f:rke2-calico: {}
+          f:etcd:
+            .: {}
+            f:disableSnapshots: {}
+            f:s3: {}
+            f:snapshotRetention: {}
+            f:snapshotScheduleCron: {}
+          f:machineGlobalConfig:
+            .: {}
+            f:cni: {}
+            f:disable-kube-proxy: {}
+            f:etcd-expose-metrics: {}
+            f:profile: {}
+          f:machinePools: {}
+          f:machineSelectorConfig: {}
+          f:registries:
+            .: {}
+            f:configs: {}
+            f:mirrors: {}
+          f:upgradeStrategy:
+            .: {}
+            f:controlPlaneConcurrency: {}
+            f:controlPlaneDrainOptions:
+              .: {}
+              f:deleteEmptyDirData: {}
+              f:disableEviction: {}
+              f:enabled: {}
+              f:force: {}
+              f:gracePeriod: {}
+              f:ignoreDaemonSets: {}
+              f:skipWaitForDeleteTimeoutSeconds: {}
+              f:timeout: {}
+            f:workerConcurrency: {}
+            f:workerDrainOptions:
+              .: {}
+              f:deleteEmptyDirData: {}
+              f:disableEviction: {}
+              f:enabled: {}
+              f:force: {}
+              f:gracePeriod: {}
+              f:ignoreDaemonSets: {}
+              f:skipWaitForDeleteTimeoutSeconds: {}
+              f:timeout: {}
+    manager: rancher
+    operation: Update
+    time: "2023-04-23T23:52:44Z"
+  - apiVersion: provisioning.cattle.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        .: {}
+        f:agentDeployed: {}
+        f:clientSecretName: {}
+        f:clusterName: {}
+        f:conditions: {}
+        f:observedGeneration: {}
+        f:ready: {}
+    manager: rancher
+    operation: Update
+    subresource: status
+    time: "2023-04-23T23:57:36Z"
+  name: haus15
+  namespace: fleet-default
+  resourceVersion: "54710"
+  uid: 935171fd-f690-428c-85c0-0e2d9ecb89a9
+spec:
+  cloudCredentialSecretName: cattle-global-data:cc-lw9dn
+  kubernetesVersion: v1.24.9+rke2r2
+  localClusterAuthEndpoint: {}
+  rkeConfig:
+    additionalManifest: |-
+      ---
+      apiVersion: helm.cattle.io/v1
+      kind: HelmChartConfig
+      metadata:
+        name: rke2-ingress-nginx
+        namespace: kube-system
+      spec:
+        valuesContent: |-
+          controller:
+            extraArgs:
+              enable-ssl-passthrough: true
+      ---
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: singleton-hdd
+      provisioner: driver.harvesterhci.io
+      allowVolumeExpansion: true
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      parameters:
+        hostStorageClass: singleton-hdd
+      ---
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: singleton-nvme
+      provisioner: driver.harvesterhci.io
+      allowVolumeExpansion: true
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      parameters:
+        hostStorageClass: singleton-nvme
+    chartValues:
+      harvester-cloud-provider:
+        cloudConfigPath: /var/lib/rancher/rke2/etc/config-files/cloud-provider-config
+        clusterName: haus15
+      rke2-calico: {}
+    etcd:
+      snapshotRetention: 5
+      snapshotScheduleCron: 0 */5 * * *
+    machineGlobalConfig:
+      cni: calico
+      disable-kube-proxy: false
+      etcd-expose-metrics: false
+      profile: null
+    machinePools:
+    - controlPlaneRole: true
+      etcdRole: true
+      machineConfigRef:
+        kind: HarvesterConfig
+        name: nc-haus15-pool1-r9f5w
+      name: pool1
+      quantity: 3
+      unhealthyNodeTimeout: 0s
+      workerRole: true
+    machineSelectorConfig:
+    - config:
+        cloud-provider-config: secret://fleet-default:harvesterconfig4ln66
+        cloud-provider-name: harvester
+        protect-kernel-defaults: false
+    registries: {}
+    upgradeStrategy:
+      controlPlaneConcurrency: "1"
+      controlPlaneDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        ignoreErrors: false
+        postDrainHooks: null
+        preDrainHooks: null
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120
+      workerConcurrency: "1"
+      workerDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        ignoreErrors: false
+        postDrainHooks: null
+        preDrainHooks: null
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120
+status:
+  agentDeployed: true
+  clientSecretName: haus15-kubeconfig
+  clusterName: c-m-hhj6w674
+  conditions:
+  - lastUpdateTime: "2023-04-23T23:57:36Z"
+    status: "False"
+    type: Reconciling
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "False"
+    type: Stalled
+  - lastUpdateTime: "2023-04-23T23:57:36Z"
+    status: "True"
+    type: Created
+  - lastUpdateTime: "2023-04-23T23:59:21Z"
+    status: "True"
+    type: RKECluster
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "True"
+    type: HarvesterCloudProviderConfigMigrated
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "True"
+    type: BackingNamespaceCreated
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "True"
+    type: DefaultProjectCreated
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "True"
+    type: SystemProjectCreated
+  - lastUpdateTime: "2023-04-23T23:52:43Z"
+    status: "True"
+    type: InitialRolesPopulated
+  - lastUpdateTime: "2023-04-23T23:52:44Z"
+    status: "True"
+    type: CreatorMadeOwner
+  - lastUpdateTime: "2023-04-23T23:53:54Z"
+    status: "True"
+    type: Provisioned
+  - lastUpdateTime: "2023-04-23T23:52:51Z"
+    status: "True"
+    type: NoDiskPressure
+  - lastUpdateTime: "2023-04-23T23:52:51Z"
+    status: "True"
+    type: NoMemoryPressure
+  - lastUpdateTime: "2023-04-23T23:52:51Z"
+    status: "True"
+    type: SecretsMigrated
+  - lastUpdateTime: "2023-04-23T23:52:52Z"
+    status: "True"
+    type: ServiceAccountSecretsMigrated
+  - lastUpdateTime: "2023-04-23T23:57:22Z"
+    status: "True"
+    type: Connected
+  - lastUpdateTime: "2023-04-23T23:59:21Z"
+    status: "True"
+    type: Updated
+  - lastUpdateTime: "2023-04-23T23:57:36Z"
+    status: "True"
+    type: Ready
+  - lastUpdateTime: "2023-04-23T23:57:06Z"
+    status: "True"
+    type: GlobalAdminsSynced
+  - lastUpdateTime: "2023-04-23T23:57:06Z"
+    status: "True"
+    type: SystemAccountCreated
+  - lastUpdateTime: "2023-04-23T23:57:08Z"
+    status: "True"
+    type: AgentDeployed
+  - lastUpdateTime: "2023-04-23T23:57:36Z"
+    status: "True"
+    type: Waiting
+  observedGeneration: 1
+  ready: true
